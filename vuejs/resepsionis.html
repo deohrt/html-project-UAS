@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <!-- CSS only -->
+        <link rel="icon" href="img/logo2.png">
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+        <title>Informasi</title>
+    </head>
+    <body class="p-3 mb-2 text-white" style="background-color: #2F5D62;" >
+         
+        <!--navbar-->
+        <nav class="navbar" style="background-color: #5E8B7E; ">
+            <div class="container-fluid">
+               <button type="button" class="btn" data-bs-toggle="modal" data-bs-target="#exampleModal" data-bs-whatever="@mdo">
+            </button>
+            <ul class="nav col-md-auto mb-2 justify-content-center mb-md-0">
+                <li><a href="index.html" class="nav-link px-2 link-dark">beranda</a></li>
+                <li><a href="kamar.html" class="nav-link px-2 link-dark">kamar</a></li>
+                <li><a href="informasi.html" class="nav-link px-2 link-light">informasi</a></li>
+            </ul>
+            </div>
+          </nav>
+
+        <div id="app" class="container-fluid">
+            <br>
+            <br>
+            <br>
+
+            <table class="table table-striped" style="background-color: #5E8B7E;">
+            <thead>
+                <tr>
+                    <th>nama</th> 
+                </tr>
+            </thead>
+            <tbody>
+                <tr v-for="data in dataCustomer">
+                    <td>{{data.nama}}</td>
+                </tr>
+            </tbody>
+             </table>
+        </div>  
+        
+        <div>
+            <script src="https://code.jquery.com/jquery-3.6.3.min.js" integrity="sha256-pvPw+upLPUjgMXY0G+8O0xUf+/Im1MZjXxxgOcBQBXU=" crossorigin="anonymous"></script>
+            <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js" integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3" crossorigin="anonymous"></script>
+           <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.min.js" integrity="sha384-cuYeSxntonz0PPNlHhBs68uyIAVpIIOZZ5JqeqvYYIcEL727kskC66kF92t6Xl2V" crossorigin="anonymous"></script>
+           <script src="https://docs.vuejs.id/js/vue.js"></script>
+           <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+       </div>
+    
+        <script>
+            let vm = new Vue({
+                el: "#app",
+                data: {
+                    title: "Data API Customer",
+                    desc : "Bebas",
+                    dataCustomer:null,
+    
+                    nama:null,
+                    check_in:null,
+                    check_out:null
+                },
+                methods:{
+                    SaveCustomer:function(){
+                        console.log("Button Kirim Ditekan")
+                        let data={
+                            'nama':this.nama,
+                            'check_in':this.check_in,
+                            'check_out':this.check_out
+                        }
+                        axios
+                        .post("https://api-project-woad.vercel.app/customer", data)
+                        .then(response => {
+                            console.log(response);
+                            $('#exampleModal').modal('hide');
+                            this.getCustomer()
+                        })
+                        .catch(error =>{
+                            console.log(error);
+                        })
+                    },
+                    DeleteCustomer(_id){
+                        console.log("Buttom delete ditekan")
+                        axios
+                        .delete("https://api-project-woad.vercel.app/customer/"+ _id)
+                        .then(response => {
+                        console.log(response)
+                        this.getCustomer()
+                    })
+                     },
+                     getCustomer(){
+                        axios
+                        .get("https://api-project-woad.vercel.app/customer")
+                        .then(response => {
+                        console.log(response);
+                        this.dataCustomer = response.data
+                    })
+                     }
+                },
+                
+                mounted (){
+                   this.getCustomer()
+                }
+               
+            })
+        </script>
+    <body>
+</html>
