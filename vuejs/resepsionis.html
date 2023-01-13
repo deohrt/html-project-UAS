@@ -33,11 +33,17 @@
             <thead>
                 <tr>
                     <th>nama</th> 
+                    <th>   </th>
+                    <th>   </th>
                 </tr>
             </thead>
             <tbody>
-                <tr v-for="data in dataCustomer">
+                <tr v-for="data in dataMahasiswa">
                     <td>{{data.nama}}</td>
+                    <td>   </td>
+                    <td>
+                        <button class="btn btn-danger" v-on:click="DeleteMahasiswa(data._id)">Hapus</button>
+                    </td>
                 </tr>
             </tbody>
              </table>
@@ -55,54 +61,52 @@
             let vm = new Vue({
                 el: "#app",
                 data: {
-                    title: "Data API Customer",
+                    title: "Data API Mahasiswa",
                     desc : "Bebas",
-                    dataCustomer:null,
+                    dataMahasiswa:null,
     
                     nama:null,
                     check_in:null,
                     check_out:null
                 },
                 methods:{
-                    SaveCustomer:function(){
+                    SaveMahasiswa:function(){
                         console.log("Button Kirim Ditekan")
                         let data={
                             'nama':this.nama,
-                            'check_in':this.check_in,
-                            'check_out':this.check_out
                         }
                         axios
-                        .post("https://api-project-woad.vercel.app/customer", data)
+                        .post("https://api-project-woad.vercel.app/mahasiswa", data)
                         .then(response => {
                             console.log(response);
                             $('#exampleModal').modal('hide');
-                            this.getCustomer()
+                            this.getMahasiswa()
                         })
                         .catch(error =>{
                             console.log(error);
                         })
                     },
-                    DeleteCustomer(_id){
+                    DeleteMahasiswa(_id){
                         console.log("Buttom delete ditekan")
                         axios
-                        .delete("https://api-project-woad.vercel.app/customer/"+ _id)
+                        .delete("https://api-project-woad.vercel.app/mahasiswa/"+ _id)
                         .then(response => {
                         console.log(response)
-                        this.getCustomer()
+                        this.getMahasiswa()
                     })
                      },
-                     getCustomer(){
+                     getMahasiswa(){
                         axios
-                        .get("https://api-project-woad.vercel.app/customer")
+                        .get("https://api-project-woad.vercel.app/mahasiswa")
                         .then(response => {
                         console.log(response);
-                        this.dataCustomer = response.data
+                        this.dataMahasiswa = response.data
                     })
                      }
                 },
                 
                 mounted (){
-                   this.getCustomer()
+                   this.getMahasiswa()
                 }
                
             })
